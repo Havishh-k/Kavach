@@ -53,11 +53,11 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
 
                     // Upload Image first
                     if (selfieBase64) {
-                        const { data: { user } } = await supabase.auth.getUser()
-                        if (!user) throw new Error("User not authenticated.")
+                        const { data: { session } } = await supabase.auth.getSession()
+                        if (!session?.user) throw new Error("User not authenticated.")
 
                         const blob = dataURItoBlob(selfieBase64)
-                        const fileName = `${user.id}/${new Date(job.deviceTimestamp).toISOString().split('T')[0]}/${job.id}.jpeg`
+                        const fileName = `${session.user.id}/${new Date(job.deviceTimestamp).toISOString().split('T')[0]}/${job.id}.jpeg`
 
                         const { error: uploadError, data: uploadData } = await supabase.storage
                             .from('attendance_selfies')
