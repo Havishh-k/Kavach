@@ -59,8 +59,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
                         const { error: uploadError, data: uploadData } = await supabase.storage
                             .from('attendance_selfies')
                             .upload(fileName, blob, {
-                                contentType: 'image/jpeg',
-                                upsert: true
+                                contentType: 'image/jpeg'
                             })
 
                         if (uploadError) throw uploadError
@@ -101,7 +100,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
 
                     // Success! Remove from IDB
                     removeJob(job.id)
-                } catch (err) {
+                } catch (err: any) {
                     console.error('Offline Sync Error:', err)
                     hadErrors = true
                     incrementRetry(job.id)
@@ -110,7 +109,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
 
             setSyncing(false)
             if (hadErrors) {
-                toast.error('Some offline records encountered a sync error. We will retry later.')
+                toast.error('Some offline records encountered a sync error. We will retry later.', { duration: 6000 })
             } else {
                 toast.success('Offline sync complete!')
             }
