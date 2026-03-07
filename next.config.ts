@@ -12,9 +12,6 @@ const withSerwist = withSerwistInit({
 process.env.SERWIST_SUPPRESS_TURBOPACK_WARNING = "1";
 
 const nextConfig: any = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
