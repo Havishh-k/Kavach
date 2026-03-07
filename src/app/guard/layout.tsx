@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { SyncProvider } from "@/components/guard/sync-provider";
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 
 export const metadata: Metadata = {
   title: "Kavach Guard App",
@@ -31,6 +32,7 @@ export default function GuardLayout({
   return (
     <SyncProvider>
       {children}
+      <PWAInstallPrompt />
     </SyncProvider>
   );
 }
