@@ -40,7 +40,7 @@ export function AttendanceDialog({ record }: DialogProps) {
                     View Data
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Verification Details</DialogTitle>
                     <DialogDescription>
@@ -57,7 +57,7 @@ export function AttendanceDialog({ record }: DialogProps) {
                             {record.is_offline_sync && <Badge variant="secondary" className="text-[10px] h-5 bg-amber-100 text-amber-800">Offline Sync</Badge>}
                         </div>
 
-                        <div className="aspect-square bg-muted rounded-xl border border-border overflow-hidden relative group">
+                        <div className="h-64 sm:aspect-square bg-muted rounded-xl border border-border overflow-hidden relative group">
                             {record.check_in_selfie_url ? (
                                 <img
                                     src={record.check_in_selfie_url}
@@ -105,7 +105,7 @@ export function AttendanceDialog({ record }: DialogProps) {
                             {!record.check_out_time && <Badge variant="outline" className="text-[10px] h-5">Pending</Badge>}
                         </div>
 
-                        <div className="aspect-square bg-muted rounded-xl border border-border overflow-hidden relative group">
+                        <div className="h-64 sm:aspect-square bg-muted rounded-xl border border-border overflow-hidden relative group">
                             {record.check_out_selfie_url ? (
                                 <img
                                     src={record.check_out_selfie_url}
