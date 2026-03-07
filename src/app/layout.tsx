@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Kavach | Security Platform",
   description: "Unified security administration and guard roster management.",
   manifest: "/manifest.json",
-  themeColor: "#10b981",
+  themeColor: "#01377D",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

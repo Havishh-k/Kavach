@@ -19,7 +19,7 @@ export default async function LoginPage({
     const resolvedSearchParams = await searchParams;
 
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
+        <div className="flex h-screen w-full items-center justify-center bg-neutral-50 px-4 dark:bg-kavach-navy">
             <Card className="w-full max-w-sm">
                 <CardHeader>
                     <CardTitle className="text-2xl">Guard Login</CardTitle>
@@ -64,3 +64,4 @@ export default async function LoginPage({
         </div>
     )
 }
+

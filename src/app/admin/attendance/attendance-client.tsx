@@ -190,7 +190,7 @@ export function AttendanceClient({ initialData }: Props) {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+                                            <Badge variant="outline" className="bg-emerald-50 text-kavach-orange border-kavach-orange">
                                                 Active Shift
                                             </Badge>
                                         )}
@@ -219,3 +219,4 @@ export function AttendanceClient({ initialData }: Props) {
         </Card>
     )
 }
+

@@ -122,10 +122,10 @@ export default async function DashboardPage() {
                     <Card className="h-full hover:border-primary/50 transition-colors cursor-pointer">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Guards On Duty</CardTitle>
-                            <UserCheck className="h-4 w-4 text-emerald-500" />
+                            <UserCheck className="h-4 w-4 text-kavach-orange" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-emerald-500">{onDuty || 0}</div>
+                            <div className="text-2xl font-bold text-kavach-orange">{onDuty || 0}</div>
                         </CardContent>
                     </Card>
                 </Link>
@@ -168,3 +168,4 @@ export default async function DashboardPage() {
         </div>
     )
 }
+

@@ -53,7 +53,7 @@ export function AttendanceDialog({ record }: DialogProps) {
                     {/* Check In Details */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 border-b border-border pb-2">
-                            <h3 className="font-semibold text-lg text-emerald-700">Check-In</h3>
+                            <h3 className="font-semibold text-lg text-kavach-orange">Check-In</h3>
                             {record.is_offline_sync && <Badge variant="secondary" className="text-[10px] h-5 bg-amber-100 text-amber-800">Offline Sync</Badge>}
                         </div>
 
@@ -170,3 +170,4 @@ export function AttendanceDialog({ record }: DialogProps) {
         </Dialog>
     )
 }
+

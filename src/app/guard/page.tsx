@@ -125,7 +125,7 @@ export default async function DashboardPage() {
   }
 
   const checkInNode = !activeAssignment ? (
-    <div className="flex-1 flex flex-col items-center justify-center text-center p-8 mt-12 bg-neutral-900 rounded-3xl border border-neutral-800 shadow-xl">
+    <div className="flex-1 flex flex-col items-center justify-center text-center p-8 mt-12 bg-[#012f6b] rounded-3xl border border-[#024a8f] shadow-xl">
       <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mb-6">
         <span className="text-2xl">😎</span>
       </div>
@@ -167,7 +167,7 @@ export default async function DashboardPage() {
         <p className="text-lg font-medium text-neutral-200">{guard.phone || 'N/A'}</p>
       </div>
 
-      <div className="pt-6 border-t border-neutral-800">
+      <div className="pt-6 border-t border-[#024a8f]">
         <h3 className="text-lg font-semibold text-white mb-4">App Preferences</h3>
         <PushNotificationPrompt guardId={guard.id} />
       </div>
@@ -187,3 +187,4 @@ export default async function DashboardPage() {
     />
   )
 }
+

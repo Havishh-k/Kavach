@@ -4,13 +4,14 @@
   "description": "Enterprise Security Guard Management Portal",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#10b981",
+  "background_color": "#FFEFE5",
+  "theme_color": "#01377D",
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "16x16 32x32 64x64",
-      "type": "image/x-icon"
+      "src": "/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
