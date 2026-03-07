@@ -9,6 +9,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar'
 import {
     Users,
@@ -56,6 +57,8 @@ const navItems = [
 ]
 
 export function AppSidebar() {
+    const { setOpenMobile, isMobile } = useSidebar()
+
     return (
         <Sidebar>
             <SidebarHeader className="h-16 flex items-center px-6 border-b border-border">
@@ -69,7 +72,7 @@ export function AppSidebar() {
                             {navItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
-                                        <Link href={item.url}>
+                                        <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
                                             <item.icon className="h-4 w-4" />
                                             <span>{item.title}</span>
                                         </Link>

@@ -35,7 +35,7 @@ export function AttendanceDialog({ record }: DialogProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button variant="ghost" size="sm" className="transition-opacity">
                     <Map className="h-4 w-4 mr-2" />
                     View Data
                 </Button>
