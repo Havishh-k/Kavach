@@ -20,6 +20,7 @@ export function GuardDashboardClient({ guardName, checkInTab, rosterTab, setting
             {/* Top Header - Kept extremely minimal for focus */}
             <header className="px-6 pt-8 pb-4 bg-neutral-900 border-b border-neutral-800 flex justify-between items-center z-10">
                 <div>
+                    <img src="/logo.png" alt="Kavach Group" className="h-8 w-auto mb-2 object-contain" />
                     <h1 className="text-xl font-bold tracking-tight text-white mb-0.5">Hello, {guardName.split(' ')[0]}</h1>
                     <p className="text-sm text-emerald-500 font-medium tracking-wide flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />

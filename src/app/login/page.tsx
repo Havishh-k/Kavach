@@ -19,10 +19,9 @@ export default async function LoginPage({
             <div className="w-full max-w-sm px-4 relative z-10">
                 <div className="bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 rounded-3xl p-8 shadow-2xl">
                     <div className="flex flex-col items-center mb-8">
-                        <div className="w-16 h-16 bg-neutral-950 border border-neutral-800 rounded-2xl flex items-center justify-center mb-6 shadow-inner">
-                            <ShieldCheck className="w-8 h-8 text-emerald-500" />
+                        <div className="h-20 w-auto mb-4 flex items-center justify-center">
+                            <img src="/logo.png" alt="Kavach Group Logo" className="h-full w-auto object-contain" />
                         </div>
-                        <h1 className="text-2xl font-bold text-white tracking-tight">Kavach Security</h1>
                         <p className="text-neutral-400 text-sm mt-2 text-center">
                             Enter your credentials to access the secure portal
                         </p>

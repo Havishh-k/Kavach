@@ -63,8 +63,10 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarHeader className="h-16 flex items-center px-6 border-b border-border">
-                <h2 className="text-lg font-bold tracking-tight text-primary">Kavach Securities</h2>
+            <SidebarHeader className="h-20 flex items-center justify-center px-4 border-b border-border bg-orange-50/50">
+                <Link href="/admin" className="flex items-center justify-center w-full h-full">
+                    <img src="/logo.png" alt="Kavach Group" className="h-12 w-auto object-contain" />
+                </Link>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
