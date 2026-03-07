@@ -27,7 +27,7 @@ export default async function DashboardLayout({
                     <header className="flex items-center h-16 px-4 border-b shrink-0 bg-white dark:bg-neutral-900 border-border">
                         <SidebarTrigger className="mr-4" />
                         <div className="ml-auto flex items-center gap-4">
-                            <span className="text-sm text-muted-foreground">{user.email}</span>
+                            <span className="text-sm text-muted-foreground">{user?.email}</span>
                             <AlertsWidget />
                         </div>
                     </header>
