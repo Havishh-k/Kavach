@@ -41,3 +41,75 @@ export async function savePushSubscription(guardId: string, subscriptionData: an
     
     return { success: true }
 }
+
+// Helper to decode Base64 in Node environments
+function dataURItoBuffer(dataURI: string) {
+    const byteString = atob(dataURI.split(',')[1])
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i)
+    }
+    return Buffer.from(ab)
+}
+
+export async function processOfflineSyncJob(job: any) {
+    const supabase = await createClient()
+
+    // Grab the securely verified session to satisfy RLS!
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+        throw new Error(`User not authenticated: ${authError?.message || 'No session'}`)
+    }
+
+    const { selfieBase64, guard_id, assignment_id, deviceTimestamp, type, id, ...attendanceData } = job.payload
+    let selfieUrl = ''
+
+    if (selfieBase64) {
+        const buffer = dataURItoBuffer(selfieBase64)
+        const fileName = `${user.id}/${new Date(job.deviceTimestamp).toISOString().split('T')[0]}/${job.id}.jpeg`
+
+        const { error: uploadError, data: uploadData } = await supabase.storage
+            .from('attendance_selfies')
+            .upload(fileName, buffer, {
+                contentType: 'image/jpeg'
+            })
+
+        if (uploadError) throw uploadError
+
+        const { data: publicUrlData } = supabase.storage
+            .from('attendance_selfies')
+            .getPublicUrl(uploadData.path)
+
+        selfieUrl = publicUrlData.publicUrl
+    }
+
+    if (job.type === 'ATTENDANCE_CHECK_IN') {
+        const finalPayload = {
+            ...attendanceData,
+            guard_id,
+            assignment_id,
+            check_in_selfie_url: selfieUrl,
+            is_offline_sync: true
+        }
+        const { error: dbError } = await supabase
+            .from('attendance')
+            .insert([finalPayload])
+
+        if (dbError) throw dbError
+    } else if (job.type === 'ATTENDANCE_CHECK_OUT') {
+        const finalPayload = {
+            ...attendanceData,
+            check_out_selfie_url: selfieUrl,
+            is_offline_sync: true
+        }
+        const { error: dbError } = await supabase
+            .from('attendance')
+            .update(finalPayload)
+            .eq('id', id)
+
+        if (dbError) throw dbError
+    }
+
+    return { success: true }
+}

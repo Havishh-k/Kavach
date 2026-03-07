@@ -2,21 +2,9 @@
 
 import { useEffect } from 'react'
 import { useSyncStore } from '@/store/sync-store'
-import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-
-// Decode Base64 to Blob helper
-function dataURItoBlob(dataURI: string) {
-    const byteString = atob(dataURI.split(',')[1])
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    const ab = new ArrayBuffer(byteString.length)
-    const ia = new Uint8Array(ab)
-    for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i)
-    }
-    return new Blob([ab], { type: mimeString })
-}
+import { processOfflineSyncJob } from '@/app/guard/actions'
 
 export function SyncProvider({ children }: { children: React.ReactNode }) {
     const queue = useSyncStore((state) => state.queue)
@@ -46,60 +34,8 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
                 }
 
                 try {
-                    // Grab payload and strip out non-schema attributes
-                    const { selfieBase64, guard_id, assignment_id, deviceTimestamp, type, id, ...attendanceData } = job.payload
-
-                    let selfieUrl = ''
-
-                    // Upload Image first
-                    if (selfieBase64) {
-                        const { data: { session } } = await supabase.auth.getSession()
-                        if (!session?.user) throw new Error("User not authenticated.")
-
-                        const blob = dataURItoBlob(selfieBase64)
-                        const fileName = `${session.user.id}/${new Date(job.deviceTimestamp).toISOString().split('T')[0]}/${job.id}.jpeg`
-
-                        const { error: uploadError, data: uploadData } = await supabase.storage
-                            .from('attendance_selfies')
-                            .upload(fileName, blob, {
-                                contentType: 'image/jpeg'
-                            })
-
-                        if (uploadError) throw uploadError
-
-                        const { data: publicUrlData } = supabase.storage
-                            .from('attendance_selfies')
-                            .getPublicUrl(uploadData.path)
-
-                        selfieUrl = publicUrlData.publicUrl
-                    }
-
-                    if (job.type === 'ATTENDANCE_CHECK_IN') {
-                        const finalPayload = {
-                            ...attendanceData,
-                            guard_id,
-                            assignment_id,
-                            check_in_selfie_url: selfieUrl,
-                            is_offline_sync: true
-                        }
-                        const { error: dbError } = await supabase
-                            .from('attendance')
-                            .insert([finalPayload])
-
-                        if (dbError) throw dbError
-                    } else if (job.type === 'ATTENDANCE_CHECK_OUT') {
-                        const finalPayload = {
-                            ...attendanceData,
-                            check_out_selfie_url: selfieUrl,
-                            is_offline_sync: true
-                        }
-                        const { error: dbError } = await supabase
-                            .from('attendance')
-                            .update(finalPayload)
-                            .eq('id', id)
-
-                        if (dbError) throw dbError
-                    }
+                    // Send entire job over Server Action where HttpOnly cookies are resolved
+                    await processOfflineSyncJob(job)
 
                     // Success! Remove from IDB
                     removeJob(job.id)
@@ -126,7 +62,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
         flushQueue()
 
         return () => window.removeEventListener('online', flushQueue)
-    }, [queue, isSyncing, setSyncing, removeJob, incrementRetry, supabase])
+    }, [queue, isSyncing, setSyncing, removeJob, incrementRetry])
 
     return <>{children}</>
 }
