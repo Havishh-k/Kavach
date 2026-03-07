@@ -39,12 +39,19 @@ export function RosterClient({ assignments, activeAssignmentId }: RosterClientPr
     const formatTime = (timeStr: string) => {
         try {
             const [h, m] = timeStr.split(':')
-            const d = new Date()
-            d.setHours(parseInt(h, 10), parseInt(m, 10))
-            return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+            const hours = parseInt(h, 10)
+            const suffix = hours >= 12 ? 'PM' : 'AM'
+            const displayHour = (hours % 12) || 12
+            return `${displayHour}:${m} ${suffix}`
         } catch {
             return timeStr
         }
+    }
+
+    // Helper to extract the YYYY-MM-DD from the string to display safely and consistently across server/client without Timezone shifts
+    const formatSafeDate = (dateStr: string) => {
+        if (!dateStr) return ''
+        return dateStr.split('T')[0]
     }
 
     return (
@@ -58,7 +65,7 @@ export function RosterClient({ assignments, activeAssignmentId }: RosterClientPr
                     <div>
                         <p className="font-semibold text-gray-800">{a.sites?.name || 'Unknown Site'}</p>
                         <p className="text-xs text-gray-500">
-                            {new Date(a.start_date).toLocaleDateString()} - {a.end_date ? new Date(a.end_date).toLocaleDateString() : 'Ongoing'}
+                            {formatSafeDate(a.start_date)} - {a.end_date ? formatSafeDate(a.end_date) : 'Ongoing'}
                         </p>
                     </div>
                     <div className={`px-2 py-1 rounded text-xs shrink-0 ml-2 ${activeAssignmentId === a.id ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
@@ -85,7 +92,7 @@ export function RosterClient({ assignments, activeAssignmentId }: RosterClientPr
                                 <div>
                                     <p className="font-medium">Dates:</p>
                                     <p>
-                                        {new Date(selectedAssignment.start_date).toLocaleDateString()} to {selectedAssignment.end_date ? new Date(selectedAssignment.end_date).toLocaleDateString() : 'Ongoing'}
+                                        {formatSafeDate(selectedAssignment.start_date)} to {selectedAssignment.end_date ? formatSafeDate(selectedAssignment.end_date) : 'Ongoing'}
                                     </p>
                                 </div>
                             </div>

@@ -32,7 +32,16 @@ export default async function DashboardPage() {
 
   // 3. Fetch all upcoming/ongoing assignments for the Roster
   const now = new Date();
-  const todayDateStr = now.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' format
+  
+  // Format securely forcing IST (India Standard Time) since Kavach is deployed in India
+  const formatter = new Intl.DateTimeFormat('en-CA', { 
+    timeZone: 'Asia/Kolkata', 
+    year: 'numeric', 
+    month: '2-digit', 
+    day: '2-digit' 
+  });
+  
+  const todayDateStr = formatter.format(now); // 'YYYY-MM-DD' exactly in IST
 
   const { data: allAssignments } = await supabase
     .from('assignments')
@@ -72,8 +81,14 @@ export default async function DashboardPage() {
   let isShiftCompletedToday = false
 
   if (activeAssignment) {
-    const startOfDay = new Date()
-    startOfDay.setHours(0, 0, 0, 0)
+    // Set startOfDay securely mapped to IST rather than UTC
+    const rawDate = new Date()
+    // Calculate IST offset (UTC + 5 hours 30 minutes = 330 minutes)
+    const istTime = new Date(rawDate.getTime() + (330 * 60 * 1000))
+    // Reset to start of day in IST
+    istTime.setUTCHours(0, 0, 0, 0)
+    // Convert back to UTC for postgres
+    const startOfDay = new Date(istTime.getTime() - (330 * 60 * 1000))
 
     let { data: attendanceData } = await supabase
       .from('attendance')
