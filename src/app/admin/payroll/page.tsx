@@ -96,7 +96,7 @@ export default async function PayrollPage() {
                                         <TableCell className="font-medium">{s.full_name}</TableCell>
                                         <TableCell className="text-right">{s.total_regular_hours.toFixed(2)}h</TableCell>
                                         <TableCell className="text-right text-orange-600">{s.total_ot_hours.toFixed(2)}h</TableCell>
-                                        <TableCell className="text-right font-bold text-kavach-orange">
+                                        <TableCell className="text-right font-bold text-emerald-600">
                                             ₹{s.gross_pay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </TableCell>
                                     </TableRow>
@@ -110,4 +110,3 @@ export default async function PayrollPage() {
         </div>
     )
 }
-

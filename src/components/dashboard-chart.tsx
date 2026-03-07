@@ -20,7 +20,7 @@ export function DashboardChart({ data }: { data: any[] }) {
     return (
         <Card className="mt-6 border border-border bg-white/70 dark:bg-neutral-900/70 backdrop-blur-lg shadow-md transition-all duration-300">
             <CardHeader className="pb-2">
-                <CardTitle className="bg-gradient-to-r from-kavach-orange to-teal-500 bg-clip-text text-transparent">
+                <CardTitle className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
                     Attendance Trends (Last 7 Days)
                 </CardTitle>
             </CardHeader>
@@ -79,4 +79,3 @@ export function DashboardChart({ data }: { data: any[] }) {
         </Card>
     )
 }
-

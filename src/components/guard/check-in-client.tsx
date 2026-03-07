@@ -143,16 +143,16 @@ export function CheckInClient({ guardId, assignmentId, siteId, siteName, isAlrea
     }
 
     return (
-        <div className="flex flex-col h-full bg-[#012f6b] rounded-3xl p-6 border border-[#024a8f] shadow-xl relative overflow-hidden">
+        <div className="flex flex-col h-full bg-neutral-900 rounded-3xl p-6 border border-neutral-800 shadow-xl relative overflow-hidden">
             {/* Ambient Background Glow based on status */}
-            <div className={`absolute -top-32 -left-32 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none ${isAlreadyCheckedIn ? 'bg-orange-500' : 'bg-kavach-orange'}`} />
+            <div className={`absolute -top-32 -left-32 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none ${isAlreadyCheckedIn ? 'bg-orange-500' : 'bg-emerald-500'}`} />
 
             <div className="relative z-10 flex justify-between items-center mb-8">
                 <div>
                     <h2 className="text-2xl font-bold text-white tracking-tight">{siteName}</h2>
                     <p className="text-neutral-400 mt-1">Current Assignment</p>
                 </div>
-                <div className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${isAlreadyCheckedIn ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' : 'bg-kavach-orange/10 text-kavach-orange border border-kavach-orange/20'}`}>
+                <div className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${isAlreadyCheckedIn ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'}`}>
                     {isAlreadyCheckedIn ? 'Active Shift' : 'Pending Start'}
                 </div>
             </div>
@@ -173,7 +173,7 @@ export function CheckInClient({ guardId, assignmentId, siteId, siteName, isAlrea
                         disabled={isCheckingIn}
                         className={`group relative w-64 h-64 rounded-full flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-2xl ${isAlreadyCheckedIn
                                 ? 'bg-gradient-to-br from-orange-500 to-red-600 hover:shadow-orange-500/25 border-4 border-neutral-900 ring-4 ring-orange-500/30'
-                                : 'bg-gradient-to-br from-kavach-orange to-kavach-orange hover:shadow-kavach-orange/25 border-4 border-neutral-900 ring-4 ring-kavach-orange/30'
+                                : 'bg-gradient-to-br from-emerald-400 to-emerald-600 hover:shadow-emerald-500/25 border-4 border-neutral-900 ring-4 ring-emerald-500/30'
                             }`}
                     >
                         {isCheckingIn ? (
@@ -190,14 +190,14 @@ export function CheckInClient({ guardId, assignmentId, siteId, siteName, isAlrea
                 ) : (
                     <div className="w-full flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="relative">
-                            <img src={previewUrl} alt="Selfie Preview" className="w-48 h-48 object-cover rounded-full border-4 border-[#024a8f] shadow-2xl" />
+                            <img src={previewUrl} alt="Selfie Preview" className="w-48 h-48 object-cover rounded-full border-4 border-neutral-800 shadow-2xl" />
                             <div className="absolute -bottom-2 -right-2 bg-neutral-800 p-2 rounded-full border border-neutral-700">
                                 <span className="text-xl">📸</span>
                             </div>
                         </div>
 
-                        <div className="bg-kavach-navy px-4 py-2 rounded-xl flex items-center border border-[#024a8f] shadow-inner">
-                            <MapPin className="h-4 w-4 text-kavach-orange mr-2" />
+                        <div className="bg-neutral-950 px-4 py-2 rounded-xl flex items-center border border-neutral-800 shadow-inner">
+                            <MapPin className="h-4 w-4 text-emerald-500 mr-2" />
                             <span className="text-sm font-mono text-neutral-300">
                                 {location ? `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}` : 'Acquiring GPS...'}
                             </span>
@@ -212,7 +212,7 @@ export function CheckInClient({ guardId, assignmentId, siteId, siteName, isAlrea
                                 Retake
                             </Button>
                             <Button
-                                className={`flex-1 h-14 rounded-2xl font-bold text-white shadow-lg ${isAlreadyCheckedIn ? 'bg-orange-600 hover:bg-orange-500 shadow-orange-900/50' : 'bg-kavach-orange hover:bg-kavach-orange shadow-kavach-orange/50'}`}
+                                className={`flex-1 h-14 rounded-2xl font-bold text-white shadow-lg ${isAlreadyCheckedIn ? 'bg-orange-600 hover:bg-orange-500 shadow-orange-900/50' : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/50'}`}
                                 onClick={handleSubmit}
                                 disabled={!location}
                             >
@@ -230,5 +230,3 @@ export function CheckInClient({ guardId, assignmentId, siteId, siteName, isAlrea
         </div>
     )
 }
-
-

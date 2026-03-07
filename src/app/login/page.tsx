@@ -11,13 +11,13 @@ export default async function LoginPage({
 }) {
     const resolvedSearchParams = await searchParams;
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-kavach-navy relative overflow-hidden">
+        <div className="flex h-screen w-full items-center justify-center bg-neutral-950 relative overflow-hidden">
             {/* Ambient glows */}
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-kavach-orange/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
 
             <div className="w-full max-w-sm px-4 relative z-10">
-                <div className="bg-[#012f6b]/80 backdrop-blur-xl border border-[#024a8f] rounded-3xl p-8 shadow-2xl">
+                <div className="bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 rounded-3xl p-8 shadow-2xl">
                     <div className="flex flex-col items-center mb-8">
                         <div className="h-20 w-auto mb-4 flex items-center justify-center">
                             <img src="/logo.png" alt="Kavach Group Logo" className="h-full w-auto object-contain" />
@@ -36,7 +36,7 @@ export default async function LoginPage({
                                 type="email"
                                 placeholder="admin@kavachsecurities.com"
                                 required
-                                className="bg-kavach-navy border-[#024a8f] text-white placeholder:text-neutral-600 h-12 rounded-xl focus-visible:ring-kavach-orange/50"
+                                className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 h-12 rounded-xl focus-visible:ring-emerald-500/50"
                             />
                         </div>
                         <div className="space-y-2">
@@ -47,7 +47,7 @@ export default async function LoginPage({
                                 type="password"
                                 placeholder="••••••••"
                                 required
-                                className="bg-kavach-navy border-[#024a8f] text-white placeholder:text-neutral-600 h-12 rounded-xl focus-visible:ring-kavach-orange/50"
+                                className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 h-12 rounded-xl focus-visible:ring-emerald-500/50"
                             />
                         </div>
 
@@ -61,7 +61,7 @@ export default async function LoginPage({
 
                         <div className="pt-2">
                             <Button
-                                className="w-full h-12 rounded-xl font-bold text-white bg-kavach-orange hover:bg-kavach-orange shadow-lg shadow-kavach-orange/50 transition-all"
+                                className="w-full h-12 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-900/50 transition-all"
                                 type="submit"
                             >
                                 <LockKeyhole className="w-4 h-4 mr-2" />
@@ -78,5 +78,3 @@ export default async function LoginPage({
         </div>
     )
 }
-
-
