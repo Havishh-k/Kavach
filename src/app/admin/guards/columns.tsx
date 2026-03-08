@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { GuardDialog } from './guard-dialog'
 import { DeleteGuardButton } from './guard-delete'
+import { GuardCredentialsDialog } from './guard-credentials-dialog'
 
 // Define the shape of our data.
 export type Guard = {
@@ -40,6 +41,7 @@ export const columns: ColumnDef<Guard>[] = [
             const guard = row.original
             return (
                 <div className="flex justify-end items-center gap-2">
+                    <GuardCredentialsDialog guard={guard} />
                     <GuardDialog guard={guard} />
                     <DeleteGuardButton id={guard.id} />
                 </div>

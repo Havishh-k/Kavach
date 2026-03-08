@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 
 export async function getGuards() {
@@ -83,4 +84,62 @@ export async function deleteGuard(id: string) {
 
     revalidatePath('/guards')
     return { success: true }
+}
+
+export async function setGuardAuthCredentials(guardId: string, email: string, password: string) {
+    const supabaseAdmin = createAdminClient()
+    const supabase = await createClient()
+
+    // Ensure the requester is an admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user || user.user_metadata?.role !== 'admin') {
+        return { success: false, error: 'Unauthorized. Only admins can assign credentials.' }
+    }
+
+    // 1. Check if the guard exists and already has a user_id
+    const { data: guard, error: guardError } = await supabaseAdmin
+        .from('guards')
+        .select('user_id')
+        .eq('id', guardId)
+        .single()
+
+    if (guardError || !guard) {
+        return { success: false, error: 'Guard not found.' }
+    }
+
+    try {
+        if (guard.user_id) {
+            // Guard already has an account, update credentials
+            const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+                guard.user_id,
+                { email, password }
+            )
+            if (updateError) throw updateError
+        } else {
+            // Guard has no account, create one
+            const { data: authData, error: createError } = await supabaseAdmin.auth.admin.createUser({
+                email,
+                password,
+                email_confirm: true,
+                user_metadata: { role: 'guard', guard_id: guardId }
+            })
+
+            if (createError) throw createError
+            if (!authData.user) throw new Error("Failed to generate Auth user.")
+
+            // Link the auth user to the guard profile
+            const { error: linkError } = await supabaseAdmin
+                .from('guards')
+                .update({ user_id: authData.user.id })
+                .eq('id', guardId)
+
+            if (linkError) throw linkError
+        }
+
+        revalidatePath('/admin/guards')
+        return { success: true }
+    } catch (e: any) {
+        console.error('Credential setup failed:', e)
+        return { success: false, error: e.message || 'Operation failed' }
+    }
 }
