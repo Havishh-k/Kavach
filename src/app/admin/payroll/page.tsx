@@ -1,7 +1,6 @@
 import { getPayrollConfigs, getMonthlyGrossPaySummary } from './actions'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { PayRateDialog } from './pay-rate-dialog'
 
 export default async function PayrollPage() {
     const guardsConf = await getPayrollConfigs()
@@ -31,35 +30,34 @@ export default async function PayrollPage() {
                 {/* Payroll Configuration */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Pay Rate Configuration</CardTitle>
-                        <CardDescription>Set base rates and OT multipliers per guard.</CardDescription>
+                        <CardTitle>Active Assignment Rates</CardTitle>
+                        <CardDescription>Base rates and OT multipliers defined per duty shift.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Guard Name</TableHead>
+                                    <TableHead>Guard</TableHead>
+                                    <TableHead>Site</TableHead>
+                                    <TableHead>Payment Type</TableHead>
                                     <TableHead>Base Rate</TableHead>
-                                    <TableHead>OT Multiplier</TableHead>
-                                    <TableHead className="text-right">Action</TableHead>
+                                    <TableHead className="text-right">OT</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {guardsConf.map(guard => {
-                                    const config = Array.isArray(guard.payroll_config)
-                                        ? guard.payroll_config[0]
-                                        : guard.payroll_config
-
+                                {guardsConf.map((assignment: any) => {
+                                    const guardName = Array.isArray(assignment.guards) ? assignment.guards[0]?.full_name : assignment.guards?.full_name
+                                    const siteName = Array.isArray(assignment.sites) ? assignment.sites[0]?.name : assignment.sites?.name
+                                    
                                     return (
-                                        <TableRow key={guard.id}>
-                                            <TableCell className="font-medium">{guard.full_name}</TableCell>
+                                        <TableRow key={assignment.id}>
+                                            <TableCell className="font-medium">{guardName || 'Unknown Guard'}</TableCell>
+                                            <TableCell>{siteName || 'Unknown Site'}</TableCell>
+                                            <TableCell className="capitalize">{assignment.payment_type || 'Hourly'}</TableCell>
                                             <TableCell>
-                                                {config?.base_hourly_rate ? `₹${config.base_hourly_rate}/hr` : <span className="text-muted-foreground">Not Set</span>}
+                                                {assignment.hourly_rate ? `₹${assignment.hourly_rate}/${assignment.payment_type === 'monthly' ? 'mo' : 'hr'}` : <span className="text-muted-foreground">Not Set</span>}
                                             </TableCell>
-                                            <TableCell>{config?.ot_multiplier || 1.5}x</TableCell>
-                                            <TableCell className="text-right">
-                                                <PayRateDialog guard={guard} />
-                                            </TableCell>
+                                            <TableCell className="text-right">{assignment.ot_multiplier || 1.5}x</TableCell>
                                         </TableRow>
                                     )
                                 })}

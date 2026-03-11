@@ -228,9 +228,9 @@ export function AssignmentDialog({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 border rounded-lg p-3 bg-muted/10">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border rounded-lg p-3 bg-muted/10">
                             <div className="grid gap-2">
-                                <Label htmlFor="payment_type">Payment Structure</Label>
+                                <Label htmlFor="payment_type">Payment Type</Label>
                                 <Select value={paymentType} onValueChange={setPaymentType}>
                                     <SelectTrigger>
                                         <SelectValue />
@@ -243,7 +243,7 @@ export function AssignmentDialog({
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="hourly_rate">
-                                    {paymentType === 'hourly' ? 'Hourly Rate (₹)' : 'Monthly Salary (₹)'}
+                                    {paymentType === 'hourly' ? 'Rate (₹/hr)' : 'Salary (₹/mo)'}
                                 </Label>
                                 <Input
                                     id="hourly_rate"
@@ -251,6 +251,17 @@ export function AssignmentDialog({
                                     type="number"
                                     step="0.01"
                                     defaultValue={assignment?.hourly_rate || ''}
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="ot_multiplier">OT Multiplier</Label>
+                                <Input
+                                    id="ot_multiplier"
+                                    name="ot_multiplier"
+                                    type="number"
+                                    step="0.1"
+                                    placeholder="e.g. 1.5"
+                                    defaultValue={(assignment as any)?.ot_multiplier !== undefined ? (assignment as any).ot_multiplier : 1.5}
                                 />
                             </div>
                         </div>

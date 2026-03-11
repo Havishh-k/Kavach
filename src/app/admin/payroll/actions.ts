@@ -6,27 +6,25 @@ import { revalidatePath } from 'next/cache'
 export async function getPayrollConfigs() {
     const supabase = await createClient()
 
-    // We fetch guards and their existing payroll config (if any)
-    const { data: guards, error } = await supabase
-        .from('guards')
+    // Fetch active assignments with their tailored pay rates
+    const { data: assignments, error } = await supabase
+        .from('assignments')
         .select(`
             id,
-            full_name,
-            phone,
-            payroll_config (
-                id,
-                base_hourly_rate,
-                ot_multiplier
-            )
+            hourly_rate,
+            ot_multiplier,
+            payment_type,
+            guards!inner ( full_name ),
+            sites!inner ( name )
         `)
-        .eq('is_active', true)
+        .order('created_at', { ascending: false })
 
     if (error) {
-        console.error("Error fetching payroll configs:", error)
+        console.error("Error fetching assignment rate configs:", error)
         return []
     }
 
-    return guards
+    return assignments
 }
 
 export async function upsertPayrollConfig(
@@ -70,7 +68,8 @@ export async function getMonthlyGrossPaySummary() {
             guard_id,
             regular_hours,
             ot_hours,
-            guards:guard_id ( full_name, payroll_config ( base_hourly_rate, ot_multiplier ) )
+            guards:guard_id ( full_name ),
+            assignments:assignment_id ( hourly_rate, ot_multiplier )
         `)
 
     if (error) {
@@ -86,35 +85,31 @@ export async function getMonthlyGrossPaySummary() {
 
         const gId = record.guard_id
         const guardsObj = Array.isArray(record.guards) ? record.guards[0] as any : record.guards as any
+        const assignObj = Array.isArray(record.assignments) ? record.assignments[0] as any : record.assignments as any
         
+        const baseRate = assignObj?.hourly_rate || 0
+        const otMultiplier = assignObj?.ot_multiplier || 1.5
+
         if (!summary[gId]) {
-            const config = Array.isArray(guardsObj.payroll_config) 
-                ? guardsObj.payroll_config[0] 
-                : guardsObj.payroll_config
-                
             summary[gId] = {
                 guard_id: gId,
-                full_name: guardsObj.full_name,
+                full_name: guardsObj?.full_name || 'Unknown Guard',
                 total_regular_hours: 0,
                 total_ot_hours: 0,
-                base_rate: config?.base_hourly_rate || 0,
-                ot_multiplier: config?.ot_multiplier || 1.5,
+                gross_pay: 0,
                 shifts_worked: 0
             }
         }
 
-        summary[gId].total_regular_hours += Number(record.regular_hours || 0)
-        summary[gId].total_ot_hours += Number(record.ot_hours || 0)
+        const regHrs = Number(record.regular_hours || 0)
+        const otHrs = Number(record.ot_hours || 0)
+        
+        summary[gId].total_regular_hours += regHrs
+        summary[gId].total_ot_hours += otHrs
+        summary[gId].gross_pay += (regHrs * baseRate) + (otHrs * baseRate * otMultiplier)
         summary[gId].shifts_worked += 1
     }
 
     // Calculate final
-    return Object.values(summary).map(s => {
-        const regularPay = s.total_regular_hours * s.base_rate
-        const otPay = s.total_ot_hours * (s.base_rate * s.ot_multiplier)
-        return {
-            ...s,
-            gross_pay: regularPay + otPay
-        }
-    })
+    return Object.values(summary)
 }

@@ -38,6 +38,7 @@ export async function createAssignment(formData: FormData) {
         shift_end_time: formData.get('shift_end_time') as string,
         payment_type: formData.get('payment_type') as string || 'hourly',
         hourly_rate: formData.get('hourly_rate') ? parseFloat(formData.get('hourly_rate') as string) : null,
+        ot_multiplier: formData.get('ot_multiplier') ? parseFloat(formData.get('ot_multiplier') as string) : 1.5,
     }
 
     const { error } = await supabase.from('assignments').insert(data)
@@ -62,6 +63,7 @@ export async function updateAssignment(id: string, formData: FormData) {
         shift_end_time: formData.get('shift_end_time') as string,
         payment_type: formData.get('payment_type') as string || 'hourly',
         hourly_rate: formData.get('hourly_rate') ? parseFloat(formData.get('hourly_rate') as string) : null,
+        ot_multiplier: formData.get('ot_multiplier') ? parseFloat(formData.get('ot_multiplier') as string) : 1.5,
     }
 
     const { error } = await supabase
